@@ -33,68 +33,16 @@ def Offline_AC(flow_sequence, topo):
 
 ###################### End here #########################
 
-
-if __name__=="__main__":
-  
-  ################## [NOTICE] ############################
-  #            Don't modify this part
-  ################## setting  ###########################
-  #   flows:
-  #     h1->h3, h2->h3, h3->h4, h4->h1, h5->h2
-  #
-  #   paths:
-  #     p1, p2, p3, p4, p5
-  #
-  #   topo:
-  #     "topo_matrix.txt"
-  #
-  #   Link bandwidth:
-  # 	 10 for each link
-  ########################################################
-  flows = [[1,3], [2, 3], [3, 4], [4, 1], [5, 2]]
-  paths = [[1, 6, 7, 8, 3], [2, 7, 8, 3], [3, 8, 9, 4], [4, 9, 10, 6, 1], [5, 10, 6, 7, 2]]
-  
-  topo = buildTopo('./topo/topo_matrix.txt')
-  inputfileName = "testcase.txt"
-  ################### End here ###########################
-
-  ################## [NOTICE] ############################
-  #            Don't modify this part
-  ############### Read Flow sequence #####################
-  #   Read flow sequence from "tesetcase.txt"
-  #   Store entire flow sequence into 'flow_sequence'
-  #   Format:
-  #     Src host ID, Dst host ID, arrival time
-  #   ex:
-  #     flow_sequnence = [[1, 3, 0], [2, 4, 3], [3, 5, 5], ....]
-  ########################################################
-  flow_sequence = []
-  with open(inputfileName) as f:
-    for idx, line in enumerate(f):
-      tmp = line[:-1].split(' ')
-      flow = [int(tmp[0]), int(tmp[1]), float(tmp[2])]
-      flow_sequence.append(flow)
-  ####################  End here #########################
-  
-
-
-  ################### Offline AC ############################
-  admission_control = Offline_AC(flow_sequence, topo)
-  ###################### End here ###########################    
-      
-
-
-
-
-  #################### [NOTICE] ############################
-  #            Don't modify this part
-  ########### Evaluate Admission Control Decision ##########
-  #              Evaluation rule
-  #       Link allocated rate = bandwidth / # of flow remain on this link
-  #       Flow Allocated Rate = Bottleneck link allocated rate of the flow
-  #       Allocated Rate > 5 * 80% -> "1"
-  #       Allocated Rate < 5 * 80% -> "-2"
-  ##########################################################
+#################### [NOTICE] ############################
+#            Don't modify this part
+########### Evaluate Admission Control Decision ##########
+#              Evaluation rule
+#       Link allocated rate = bandwidth / # of flow remain on this link
+#       Flow Allocated Rate = Bottleneck link allocated rate of the flow
+#       Allocated Rate > 5 * 80% -> "1"
+#       Allocated Rate < 5 * 80% -> "-2"
+##########################################################
+def Evaluate(flow_sequence, admission_control):
   flow_score = []
   flow_remained = []
   for idx, flow in enumerate(flow_sequence):
@@ -149,12 +97,57 @@ if __name__=="__main__":
   print '##########  Result of Offline Admission Control Scheduling ############'
   print '#######################################################################\n'
   print ("Total score of offline AC is {}".format(total_score))
+###################### End here  ####################################
 
+if __name__=="__main__":
   
+  ################## [NOTICE] ############################
+  #            Don't modify this part
+  ################## setting  ###########################
+  #   flows:
+  #     h1->h3, h2->h3, h3->h4, h4->h1, h5->h2
+  #
+  #   paths:
+  #     p1, p2, p3, p4, p5
+  #
+  #   topo:
+  #     "topo_matrix.txt"
+  #
+  #   Link bandwidth:
+  # 	 10 for each link
+  ########################################################
+  flows = [[1,3], [2, 3], [3, 4], [4, 1], [5, 2]]
+  paths = [[1, 6, 7, 8, 3], [2, 7, 8, 3], [3, 8, 9, 4], [4, 9, 10, 6, 1], [5, 10, 6, 7, 2]]
   
+  topo = buildTopo('./topo/topo_matrix.txt')
+  inputfileName = "testcase.txt"
+  ################### End here ###########################
+
+  ################## [NOTICE] ############################
+  #            Don't modify this part
+  ############### Read Flow sequence #####################
+  #   Read flow sequence from "tesetcase.txt"
+  #   Store entire flow sequence into 'flow_sequence'
+  #   Format:
+  #     Src host ID, Dst host ID, arrival time
+  #   ex:
+  #     flow_sequnence = [[1, 3, 0], [2, 4, 3], [3, 5, 5], ....]
+  ########################################################
+  flow_sequence = []
+  with open(inputfileName) as f:
+    for idx, line in enumerate(f):
+      tmp = line[:-1].split(' ')
+      flow = [int(tmp[0]), int(tmp[1]), float(tmp[2])]
+      flow_sequence.append(flow)
+  ####################  End here #########################
   
-  ###################### End here  ####################################
 
 
+  ################### Offline AC ############################
+  admission_control = Offline_AC(flow_sequence, topo)
+  ###################### End here ###########################    
+      
 
-
+  #################### Evaluate  ###########################
+  Evaluate(flow_sequence, admission_control)
+  ###################### End here ###########################
